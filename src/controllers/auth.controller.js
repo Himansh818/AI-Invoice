@@ -1,99 +1,99 @@
-const express = require("express");
-const authModel = require("../models/auth.model");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
+// const express = require("express");
+// const authModel = require("../models/auth.model");
+// const jwt = require("jsonwebtoken");
+// const bcrypt = require("bcryptjs");
 
-const registerUser = async (req, res) => {
-  try {
-    const { username, email, password, role = "user" } = req.body;
+// const registerUser = async (req, res) => {
+//   try {
+//     const { username, email, password, role = "user" } = req.body;
 
-    const isUserAlreadyExists = await authModel.findOne({
-      $or: [
-        {
-          username,
-        },
-        {
-          email,
-        },
-      ],
-    });
+//     const isUserAlreadyExists = await authModel.findOne({
+//       $or: [
+//         {
+//           username,
+//         },
+//         {
+//           email,
+//         },
+//       ],
+//     });
 
-    if (isUserAlreadyExists) {
-      return res.status(401).json({
-        message: "User already exists !",
-      });
-    }
+//     if (isUserAlreadyExists) {
+//       return res.status(401).json({
+//         message: "User already exists !",
+//       });
+//     }
 
-    // password converted into hash with 10 salt rounds
-    const hash = await bcrypt.hash(password, 10);
+//     // password converted into hash with 10 salt rounds
+//     const hash = await bcrypt.hash(password, 10);
 
-    const user = await authModel.create({
-      username,
-      email,
-      password: hash,
-      role,
-    });
+//     const user = await authModel.create({
+//       username,
+//       email,
+//       password: hash,
+//       role,
+//     });
 
-    return res.status(201).json({
-      success: true,
-      message: "User registered !",
-      user,
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
+//     return res.status(201).json({
+//       success: true,
+//       message: "User registered !",
+//       user,
+//     });
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
 
-const loginUser = async (req, res) => {
-  try {
-    const { username, email, password } = req.body;
+// const loginUser = async (req, res) => {
+//   try {
+//     const { username, email, password } = req.body;
 
-    const user = await authModel.findOne({
-      $or: [
-        {
-          username,
-        },
-        {
-          email,
-        },
-      ],
-    });
-    if (!user) {
-      return res.status(401).json({
-        message: "user not found !",
-      });
-    }
+//     const user = await authModel.findOne({
+//       $or: [
+//         {
+//           username,
+//         },
+//         {
+//           email,
+//         },
+//       ],
+//     });
+//     if (!user) {
+//       return res.status(401).json({
+//         message: "user not found !",
+//       });
+//     }
 
-    //pasowrd hash to compare form real hashed password
+//     //pasowrd hash to compare form real hashed password
 
-    const isMatch = await bcrypt.compare(password, user.password);
+//     const isMatch = await bcrypt.compare(password, user.password);
 
-    //check password
-    if (!isMatch) {
-      return res.status(401).json({
-        message: "invalid password !",
-      });
-    }
+//     //check password
+//     if (!isMatch) {
+//       return res.status(401).json({
+//         message: "invalid password !",
+//       });
+//     }
 
-    const token = jwt.sign(
-      {
-        id: user._id,
-        role: user.role,
-      },
-      process.env.JWT_SECRET_KEY,
-    );
+//     const token = jwt.sign(
+//       {
+//         id: user._id,
+//         role: user.role,
+//       },
+//       process.env.JWT_SECRET_KEY,
+//     );
 
-    res.cookie("token", token);
+//     res.cookie("token", token);
 
-    res.status(201).json({
-      success: true,
-      message: "Login successfully",
-      user: user,
-      token,
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
+//     res.status(201).json({
+//       success: true,
+//       message: "Login successfully",
+//       user: user,
+//       token,
+//     });
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
 
-module.exports = { registerUser, loginUser };
+// module.exports = { registerUser, loginUser };
