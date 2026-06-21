@@ -3,12 +3,12 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
-const registerUser = () =>{
+const registerUser = (req, res) =>{
   return res.status(200).json({
       success: true,
       message: "User registered !"})
 }
-const loginUser = () =>{
+const loginUser = (req, res) =>{
   return res.status(201).json({
       success: true,
       message: "User login !"})
