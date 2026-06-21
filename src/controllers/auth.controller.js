@@ -3,10 +3,27 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
+const { registerSchema }  = require('../validators/auth.validator');
+const { success } = require("zod");
+
+
 const registerUser = (req, res) =>{
-  return res.status(200).json({
+  
+  try {
+    const validatedData = registerSchema.parse(req.body);
+
+    return res.status(200).json({
       success: true,
-      message: "User registered !"})
+      message: "validation succesfull",
+      data: validatedData,
+    })
+
+  } catch (error) {
+    return res.status(400).json({
+      success:false,
+      message: error.errors?.[0]?.message || "validation failed",
+    })
+  }
 }
 const loginUser = (req, res) =>{
   return res.status(201).json({
