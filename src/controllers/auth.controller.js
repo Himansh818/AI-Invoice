@@ -1,8 +1,20 @@
-// const express = require("express");
+const express = require("express");
 // const authModel = require("../models/auth.model");
-// const jwt = require("jsonwebtoken");
-// const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 
+const registerUser = () =>{
+  return res.status(200).json({
+      success: true,
+      message: "User registered !"})
+}
+const loginUser = () =>{
+  return res.status(201).json({
+      success: true,
+      message: "User login !"})
+}
+
+module.exports = { registerUser, loginUser }
 // const registerUser = async (req, res) => {
 //   try {
 //     const { username, email, password, role = "user" } = req.body;
@@ -91,7 +103,8 @@
 //       user: user,
 //       token,
 //     });
-//   } catch (error) {
+//   } catch
+//  (error) {
 //     console.log(error);
 //   }
 // };
