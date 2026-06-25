@@ -1,4 +1,5 @@
 const express = require("express");
+const authService = require("../services/auth.service");
 // const authModel = require("../models/auth.model");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
@@ -7,10 +8,14 @@ const { registerSchema }  = require('../validators/auth.validator');
 const { success } = require("zod");
 
 
-const registerUser = (req, res) =>{
+const registerUser =async (req, res) =>{
   
   try {
     const validatedData = registerSchema.parse(req.body);
+
+    const existingUser = await authService.findUserByEmail(
+      validatedData.email
+    )
 
     return res.status(200).json({
       success: true,
