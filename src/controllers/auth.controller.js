@@ -17,11 +17,23 @@ const registerUser =async (req, res) =>{
       validatedData.email
     )
 
+  if (existingUser) {
+      return res.status(409).json({
+        success: false,
+        message: "Email already exists",
+      });
+    }
+
+     const hashedPassword = await bcrypt.hash(
+      validatedData.password,
+      10
+    );
+
     return res.status(200).json({
       success: true,
-      message: "validation succesfull",
-      data: validatedData,
-    })
+      message: "Validation + Email Check Passed",
+      hashedPassword,
+    });
 
   } catch (error) {
     return res.status(400).json({
